@@ -19,7 +19,7 @@ const EmailInput = <T extends FieldValues>({
     <div>
       <label
         htmlFor={id}
-        className="block text-md text-gray-600 dark:text-gray-300 mb-1"
+        className="text-md mb-1 block text-gray-600 dark:text-gray-300"
       >
         {label}
       </label>
@@ -27,7 +27,7 @@ const EmailInput = <T extends FieldValues>({
         id="email"
         type="email"
         {...register(name)}
-        className="w-full rounded-md border border-gray-300 dark:border-slate-400 dark:text-white p-3 focus:outline-2 focus:outline-indigo-400"
+        className="w-full rounded-md border border-gray-300 p-3 focus:outline-2 focus:outline-indigo-400 dark:border-slate-400 dark:text-white"
       />
       {error && <p className="text-red-500 dark:text-red-400">{error}</p>}
     </div>

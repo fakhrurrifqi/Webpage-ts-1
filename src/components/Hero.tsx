@@ -10,7 +10,7 @@ const Hero = () => {
           Welcome To Our Website
         </h2>
         <p className="mt-2 text-lg">We Build Amazing Website</p>
-        <a href="#choose" className="mt-6 animated-btn">
+        <a href="#choose" className="animated-btn mt-6">
           Get Started
         </a>
       </div>

@@ -21,19 +21,19 @@ const SignUp = () => {
 
   return (
     <div>
-      <div className="fixed top-3 lg:top-4 right-3 lg:right-4 size-9 lg:size-10 bg-indigo-600/60 dark:bg-indigo-300/50 rounded-full flex items-center justify-center p-2 shadow-lg hover:ring-2 hover:ring-indigo-600 dark:hover:ring-indigo-200 shadow-indigo-600/40 dark:shadow-indigo-200/20 z-20">
+      <div className="fixed top-3 right-3 z-20 flex size-9 items-center justify-center rounded-full bg-indigo-600/60 p-2 shadow-lg shadow-indigo-600/40 hover:ring-2 hover:ring-indigo-600 lg:top-4 lg:right-4 lg:size-10 dark:bg-indigo-300/50 dark:shadow-indigo-200/20 dark:hover:ring-indigo-200">
         <ThemeToggle />
       </div>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-slate-900 px-4">
-        <div className="w-full max-w-md p-8 bg-white dark:bg-slate-800 rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-center text-indigo-600 dark:text-indigo-300 mb-6">
+      <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4 dark:bg-slate-900">
+        <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md dark:bg-slate-800">
+          <h2 className="mb-6 text-center text-2xl font-bold text-indigo-600 dark:text-indigo-300">
             Sign Up
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
               <label
                 htmlFor="name"
-                className="block text-md text-gray-600 dark:text-gray-300 mb-1"
+                className="text-md mb-1 block text-gray-600 dark:text-gray-300"
               >
                 Name
               </label>
@@ -41,7 +41,7 @@ const SignUp = () => {
                 id="name"
                 type="text"
                 {...register("name")}
-                className="w-full rounded-md border border-gray-300 dark:border-slate-400 dark:text-white p-3 focus:outline-2 focus:outline-indigo-400"
+                className="w-full rounded-md border border-gray-300 p-3 focus:outline-2 focus:outline-indigo-400 dark:border-slate-400 dark:text-white"
               />
               {errors.name && (
                 <p className="text-red-500 dark:text-red-400">
@@ -78,7 +78,7 @@ const SignUp = () => {
             </div>
             <button
               type="submit"
-              className="bg-indigo-500 hover:bg-indigo-600  border-white focus:outline-indigo-400 focus:outline-offset-3 text-white w-full p-3 font-semibold rounded-md"
+              className="w-full rounded-md border-white bg-indigo-500 p-3 font-semibold text-white hover:bg-indigo-600 focus:outline-offset-3 focus:outline-indigo-400"
             >
               Sign Up
             </button>
@@ -90,7 +90,7 @@ const SignUp = () => {
             </Link>
           </p>
           {/* Home Link */}
-          <div className="text-center mt-4">
+          <div className="mt-4 text-center">
             <a
               href="/"
               className="text-indigo-600 hover:underline dark:text-indigo-300"

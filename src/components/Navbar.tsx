@@ -35,16 +35,20 @@ const Navbar = () => {
   );
   return (
     <nav className="fixed top-0 z-20 flex w-full items-center justify-between bg-white dark:bg-slate-900 px-6 py-4 shadow-md">
-      <h1 className="text-2xl font-bold text-indigo-600 dark:text-gray-100 ">
-        Brand
-      </h1>
+      <div className="flex items-center space-x-6">
+        <h1 className="text-2xl font-bold text-indigo-600 dark:text-gray-100 ">
+          Brand
+        </h1>
+        <ul className="hidden space-x-6 text-gray-800 dark:text-gray-100 md:flex items-center">
+          {navLinks}
+        </ul>
+      </div>
 
       <div className="flex items-center space-x-6">
         {/* Desktop Nav */}
         <ThemeToggle />
 
         <ul className="hidden space-x-6 text-gray-800 dark:text-gray-100 md:flex items-center">
-          {navLinks}
           <li>
             <Link
               to="/signin"

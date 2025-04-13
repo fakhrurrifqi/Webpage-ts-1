@@ -22,7 +22,7 @@ const PasswordInput = <T extends FieldValues>({
     <div>
       <label
         htmlFor={id}
-        className="block text-md text-gray-600 dark:text-gray-300 mb-1"
+        className="text-md mb-1 block text-gray-600 dark:text-gray-300"
       >
         {label}
       </label>
@@ -31,12 +31,12 @@ const PasswordInput = <T extends FieldValues>({
           id={id}
           type={showPassword ? "text" : "password"}
           {...register(name)}
-          className="w-full rounded-md border border-gray-300 dark:border-slate-400 dark:text-white p-3 focus:outline-2 focus:outline-indigo-400"
+          className="w-full rounded-md border border-gray-300 p-3 focus:outline-2 focus:outline-indigo-400 dark:border-slate-400 dark:text-white"
         />
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300 focus:outline-none"
+          className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 focus:outline-none dark:text-gray-300"
           aria-label="Toggle password visibility"
         >
           <span className="material-symbols-outlined text-lg">
@@ -44,7 +44,7 @@ const PasswordInput = <T extends FieldValues>({
           </span>
         </button>
       </div>
-      {error && <p className="text-red-500 dark:text-red-400 mt-1">{error}</p>}
+      {error && <p className="mt-1 text-red-500 dark:text-red-400">{error}</p>}
     </div>
   );
 };
