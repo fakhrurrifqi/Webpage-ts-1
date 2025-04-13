@@ -4,6 +4,7 @@ import { SignUpSchema, signUpSchema } from "../schemas/signUpSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PasswordInput from "../components/PasswordInput";
+import EmailInput from "../components/EmailInput";
 
 const SignUp = () => {
   const {
@@ -49,23 +50,13 @@ const SignUp = () => {
               )}
             </div>
             <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-md text-gray-600 dark:text-gray-300 mb-1"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                {...register("email")}
-                className="w-full rounded-md border border-gray-300 dark:border-slate-400 dark:text-white p-3 focus:outline-2 focus:outline-indigo-400"
+              <EmailInput<SignUpSchema>
+                id="signUpEmail"
+                label="Email"
+                name="email"
+                register={register}
+                error={errors.email?.message}
               />
-              {errors.email && (
-                <p className="text-red-500 dark:text-red-400">
-                  {errors.email.message}
-                </p>
-              )}
             </div>
             <div className="mb-4">
               <PasswordInput<SignUpSchema>
