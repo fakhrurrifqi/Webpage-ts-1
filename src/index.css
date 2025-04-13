@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
+@import "tailwindcss";
+/* @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Underdog&display=swap"); */
+
+html {
+  scroll-behavior: smooth;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer components {
+  .animated-btn {
+    @apply inline-block transform rounded-lg bg-indigo-500 px-6 py-3 font-bold text-white shadow-md transition duration-300 hover:translate-x-1 hover:-translate-y-0.5 hover:bg-indigo-600;
+  }
+}
+
+@theme {
+  --font-grotesk: "Space Grotesk", sans-serif;
+}
