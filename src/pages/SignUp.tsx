@@ -1,10 +1,16 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import ThemeToggle from "../components/ThemeToggle";
 import { SignUpSchema, signUpSchema } from "../schemas/signUpSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PasswordInput from "../components/PasswordInput";
 import EmailInput from "../components/EmailInput";
+import NameInput from "../components/NameInput";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../lib/firebase";
+import toast from "react-hot-toast";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
 const SignUp = () => {
   const {
@@ -15,8 +21,30 @@ const SignUp = () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit = (data: SignUpSchema) => {
-    console.log("Sign Up Data:", data);
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: SignUpSchema) => {
+    const { name, email, password } = data;
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      await updateProfile(user, { displayName: name });
+
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name: name,
+        createdAt: new Date(),
+      });
+      toast.success("Account created successfully!");
+      setTimeout(() => navigate("/dashboard"), 500);
+    } catch (error) {
+      toast.error("Error creating account. Please try again.");
+      console.error("Sign up error: ", error);
+    }
   };
 
   return (
@@ -31,23 +59,13 @@ const SignUp = () => {
           </h2>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-              <label
-                htmlFor="name"
-                className="text-md mb-1 block text-gray-600 dark:text-gray-300"
-              >
-                Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                {...register("name")}
-                className="w-full rounded-md border border-gray-300 p-3 focus:outline-2 focus:outline-indigo-400 dark:border-slate-400 dark:text-white"
+              <NameInput<SignUpSchema>
+                id="signUpName"
+                label="Name"
+                name="name"
+                register={register}
+                error={errors.name?.message}
               />
-              {errors.name && (
-                <p className="text-red-500 dark:text-red-400">
-                  {errors.name.message}
-                </p>
-              )}
             </div>
             <div className="mb-4">
               <EmailInput<SignUpSchema>

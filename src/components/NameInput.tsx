@@ -1,24 +1,24 @@
 import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 
-type EmailInputProps<T extends FieldValues> = {
+type NameInputProps<T extends FieldValues> = {
   id: string;
   label: string;
-  register?: UseFormRegister<T>;
-  name?: Path<T>;
+  register: UseFormRegister<T>;
+  name: Path<T>;
   error?: string;
   value?: string;
-  readonly?: boolean;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const EmailInput = <T extends FieldValues>({
+const NameInput = <T extends FieldValues>({
   id,
   label,
   register,
   name,
   value,
-  readonly,
   error,
-}: EmailInputProps<T>) => {
+  onChange,
+}: NameInputProps<T>) => {
   return (
     <div>
       <label
@@ -28,11 +28,11 @@ const EmailInput = <T extends FieldValues>({
         {label}
       </label>
       <input
-        id="email"
-        type="email"
-        {...(register && name && !readonly ? register(name) : {})}
+        id="name"
+        type="text"
+        {...register(name)}
         value={value}
-        readOnly={readonly}
+        onChange={onChange}
         className="w-full rounded-md border border-gray-300 p-3 focus:outline-2 focus:outline-indigo-400 dark:border-slate-400 dark:text-white"
       />
       {error && <p className="text-red-500 dark:text-red-400">{error}</p>}
@@ -40,4 +40,4 @@ const EmailInput = <T extends FieldValues>({
   );
 };
 
-export default EmailInput;
+export default NameInput;

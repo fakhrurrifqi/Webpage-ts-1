@@ -1,10 +1,13 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import ThemeToggle from "../components/ThemeToggle";
 import PasswordInput from "../components/PasswordInput";
 import EmailInput from "../components/EmailInput";
 import { signInSchema, SignInSchema } from "../schemas/signInSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../lib/firebase";
+import toast from "react-hot-toast";
 
 const SignIn = () => {
   const {
@@ -15,8 +18,17 @@ const SignIn = () => {
     resolver: zodResolver(signInSchema),
   });
 
-  const onSubmit = (data: SignInSchema) => {
-    console.log("Sign In Data:", data);
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: SignInSchema) => {
+    try {
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      toast.success("Signed In");
+      setTimeout(() => navigate("/dashboard"), 500);
+    } catch (error) {
+      toast.error("Failed to sign in");
+      console.error("Sign in error: ", error);
+    }
   };
   return (
     <div>

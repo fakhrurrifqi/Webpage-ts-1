@@ -1,15 +1,22 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 import ThemeToggle from "./ThemeToggle";
-import { Link } from "react-router";
+import AuthButtons from "./AuthButtons";
+import { handleSignOut } from "../lib/authUtils";
+import { useLocation } from "react-router";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const user = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navLinks = (
     <>
       <li>
         <a
-          href="#hero"
+          href="/#hero"
           className="hover:text-indigo-400 dark:hover:text-indigo-300"
         >
           Home
@@ -17,7 +24,7 @@ const Navbar = () => {
       </li>
       <li>
         <a
-          href="#choose"
+          href="/#choose"
           className="hover:text-indigo-400 dark:hover:text-indigo-300"
         >
           Features
@@ -25,7 +32,7 @@ const Navbar = () => {
       </li>
       <li>
         <a
-          href="#contact"
+          href="/#contact"
           className="hover:text-indigo-400 dark:hover:text-indigo-300"
         >
           Contact
@@ -33,13 +40,14 @@ const Navbar = () => {
       </li>
     </>
   );
+
   return (
-    <nav className="fixed top-0 z-20 flex w-full items-center justify-between bg-white dark:bg-slate-900 px-6 py-4 shadow-md">
+    <nav className="fixed top-0 z-20 flex w-full items-center justify-between bg-white px-6 py-4 shadow-md dark:bg-slate-900">
       <div className="flex items-center space-x-6">
-        <h1 className="text-2xl font-bold text-indigo-600 dark:text-gray-100 ">
+        <h1 className="text-2xl font-bold text-indigo-600 dark:text-gray-100">
           Brand
         </h1>
-        <ul className="hidden space-x-6 text-gray-800 dark:text-gray-100 md:flex items-center">
+        <ul className="hidden items-center space-x-6 text-gray-800 md:flex dark:text-gray-100">
           {navLinks}
         </ul>
       </div>
@@ -48,23 +56,32 @@ const Navbar = () => {
         {/* Desktop Nav */}
         <ThemeToggle />
 
-        <ul className="hidden space-x-6 text-gray-800 dark:text-gray-100 md:flex items-center">
-          <li>
-            <Link
-              to="/signin"
-              className="px-4 py-1.5 rounded font-bold text-indigo-600 dark:text-indigo-300 hover:text-indigo-800 dark:hover:text-white"
-            >
-              Log In
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/signup"
-              className="px-4 py-1.5 rounded font-bold bg-indigo-600 text-white hover:bg-indigo-500 dark:bg-indigo-400 dark:text-gray-900 dark:hover:bg-indigo-300"
-            >
-              Sign Up
-            </Link>
-          </li>
+        <ul className="hidden items-center space-x-6 text-gray-800 md:flex dark:text-gray-100">
+          {user ? (
+            <>
+              {location.pathname !== "/dashboard" && (
+                <AuthButtons to="/dashboard">Dashboard</AuthButtons>
+              )}
+
+              {location.pathname !== "/profile" && (
+                <AuthButtons to="/profile">Profile</AuthButtons>
+              )}
+
+              <AuthButtons
+                onClick={() => handleSignOut(navigate)}
+                variant="button"
+              >
+                Sign Out
+              </AuthButtons>
+            </>
+          ) : (
+            <>
+              <AuthButtons to="/signin">Login</AuthButtons>
+              <AuthButtons to="/signup" variant="button">
+                Sign Up
+              </AuthButtons>
+            </>
+          )}
         </ul>
       </div>
 
@@ -72,7 +89,7 @@ const Navbar = () => {
       <div className="flex items-center space-x-4 md:hidden">
         <button
           onClick={() => setMenuOpen(true)}
-          className="text-3xl text-indigo-400 hover:text-indigo-500 dark:text-gray-100 dark:hover:text-indigo-300 focus:outline-none"
+          className="text-3xl text-indigo-400 hover:text-indigo-500 focus:outline-none dark:text-gray-100 dark:hover:text-indigo-300"
         >
           ☰
         </button>
@@ -80,7 +97,7 @@ const Navbar = () => {
 
       {/* Mobile Menu Slide Out */}
       <div
-        className={`fixed top-0 right-0 z-30 h-full w-2/3 transform bg-white dark:bg-slate-900 p-6 shadow-lg transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed top-0 right-0 z-30 h-full w-2/3 transform bg-white p-6 shadow-lg transition-transform duration-300 ease-in-out md:hidden dark:bg-slate-900 ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -92,22 +109,45 @@ const Navbar = () => {
         </button>
         <ul className="mt-12 space-y-4 text-lg text-gray-800 dark:text-gray-100">
           {navLinks}
-          <li>
-            <Link
-              to="/signin"
-              className="block hover:text-indigo-400 dark:hover:text-indigo-300"
-            >
-              Sign In
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/signup"
-              className="block hover:text-indigo-400 dark:hover:text-indigo-300"
-            >
-              Sign Up
-            </Link>
-          </li>
+          {user ? (
+            <>
+              <li>
+                {location.pathname !== "/dashboard" && (
+                  <AuthButtons to="/dashboard" isMobile>
+                    Dashboard
+                  </AuthButtons>
+                )}
+              </li>
+              {location.pathname !== "/profile" && (
+                <li>
+                  <AuthButtons to="/profile" isMobile>
+                    Profile
+                  </AuthButtons>
+                </li>
+              )}
+              <li>
+                <AuthButtons
+                  onClick={() => handleSignOut(navigate)}
+                  isMobile={true}
+                >
+                  Sign Out
+                </AuthButtons>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <AuthButtons to="/signin" isMobile={true}>
+                  Sign In
+                </AuthButtons>
+              </li>
+              <li>
+                <AuthButtons to="/signup" isMobile={true}>
+                  Sign Up
+                </AuthButtons>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>
