@@ -58,7 +58,10 @@ const AuthNavLinks: React.FC<AuthNavLinksProps> = ({
       ) : (
         <>
           {renderButton({ children: "Login", to: "/signin" }, "signin")}
-          {renderButton({ children: "Sign Up", variant: "button" }, "signup")}
+          {renderButton(
+            { children: "Sign Up", to: "/signup", variant: "button" },
+            "signup",
+          )}
         </>
       )}
     </ul>
