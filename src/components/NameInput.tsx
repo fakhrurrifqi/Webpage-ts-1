@@ -21,10 +21,7 @@ const NameInput = <T extends FieldValues>({
 }: NameInputProps<T>) => {
   return (
     <div>
-      <label
-        htmlFor={id}
-        className="text-md mb-1 block text-gray-600 dark:text-gray-300"
-      >
+      <label htmlFor={id} className="text-md text-card-foreground mb-1 block">
         {label}
       </label>
       <input
@@ -33,7 +30,7 @@ const NameInput = <T extends FieldValues>({
         {...register(name)}
         value={value}
         onChange={onChange}
-        className="w-full rounded-md border border-gray-300 p-3 focus:outline-2 focus:outline-indigo-400 dark:border-slate-400 dark:text-white"
+        className="border-input placeholder:text-muted-foreground text-foreground focus-visible:ring-ring w-full rounded-md border p-3 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
       />
       {error && <p className="text-red-500 dark:text-red-400">{error}</p>}
     </div>

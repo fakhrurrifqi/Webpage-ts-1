@@ -1,156 +1,104 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useAuth } from "../hooks/useAuth";
+import { useEffect, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
-import AuthButtons from "./AuthButtons";
-import { handleSignOut } from "../lib/authUtils";
-import { useLocation } from "react-router";
+import AuthNavLinks from "./AuthNavLinks";
+import MobileMenu from "./MobileMenu";
+
+interface NavLink {
+  href: string;
+  label: string;
+}
+
+const mainNavLinks: NavLink[] = [
+  { href: "/#hero", label: "Home" },
+  { href: "/#choose", label: "Features" },
+  { href: "/#contact", label: "Contact" },
+];
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const user = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
 
-  const navLinks = (
-    <>
-      <li>
-        <a
-          href="/#hero"
-          className="hover:text-indigo-400 dark:hover:text-indigo-300"
-        >
-          Home
-        </a>
-      </li>
-      <li>
-        <a
-          href="/#choose"
-          className="hover:text-indigo-400 dark:hover:text-indigo-300"
-        >
-          Features
-        </a>
-      </li>
-      <li>
-        <a
-          href="/#contact"
-          className="hover:text-indigo-400 dark:hover:text-indigo-300"
-        >
-          Contact
-        </a>
-      </li>
-    </>
-  );
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // Initial check in case page loads already scrolled
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const closeMobileMenu = () => setMenuOpen(false);
 
   return (
-    <nav className="fixed top-0 z-20 flex w-full items-center justify-between bg-white px-6 py-4 shadow-md dark:bg-slate-900">
-      <div className="flex items-center space-x-6">
-        <h1 className="text-2xl font-bold text-indigo-600 dark:text-gray-100">
-          Brand
-        </h1>
-        <ul className="hidden items-center space-x-6 text-gray-800 md:flex dark:text-gray-100">
-          {navLinks}
-        </ul>
-      </div>
-
-      <div className="flex items-center space-x-6">
-        {/* Desktop Nav */}
-        <ThemeToggle />
-
-        <ul className="hidden items-center space-x-6 text-gray-800 md:flex dark:text-gray-100">
-          {user ? (
-            <>
-              {location.pathname !== "/dashboard" && (
-                <AuthButtons to="/dashboard">Dashboard</AuthButtons>
-              )}
-
-              {location.pathname !== "/profile" && (
-                <AuthButtons to="/profile">Profile</AuthButtons>
-              )}
-
-              <AuthButtons
-                onClick={() => handleSignOut(navigate)}
-                variant="button"
-              >
-                Sign Out
-              </AuthButtons>
-            </>
-          ) : (
-            <>
-              <AuthButtons to="/signin">Login</AuthButtons>
-              <AuthButtons to="/signup" variant="button">
-                Sign Up
-              </AuthButtons>
-            </>
-          )}
-        </ul>
-      </div>
-
-      {/* Mobile Burger */}
-      <div className="flex items-center space-x-4 md:hidden">
-        <button
-          onClick={() => setMenuOpen(true)}
-          className="text-3xl text-indigo-400 hover:text-indigo-500 focus:outline-none dark:text-gray-100 dark:hover:text-indigo-300"
-        >
-          ☰
-        </button>
-      </div>
-
-      {/* Mobile Menu Slide Out */}
-      <div
-        className={`fixed top-0 right-0 z-30 h-full w-2/3 transform bg-white p-6 shadow-lg transition-transform duration-300 ease-in-out md:hidden dark:bg-slate-900 ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
+    <>
+      <nav
+        className={`border-border fixed top-0 z-20 flex w-full items-center justify-between border-b px-6 py-4 transition-all duration-300 ease-in-out ${
+          scrolled ? "bg-background/70 backdrop-blur-md" : "bg-background"
         }`}
       >
-        <button
-          onClick={() => setMenuOpen(false)}
-          className="absolute top-4 right-4 text-2xl text-indigo-400 hover:text-indigo-500 dark:text-gray-100 dark:hover:text-indigo-300"
-        >
-          ✕
-        </button>
-        <ul className="mt-12 space-y-4 text-lg text-gray-800 dark:text-gray-100">
-          {navLinks}
-          {user ? (
-            <>
-              <li>
-                {location.pathname !== "/dashboard" && (
-                  <AuthButtons to="/dashboard" isMobile>
-                    Dashboard
-                  </AuthButtons>
-                )}
-              </li>
-              {location.pathname !== "/profile" && (
-                <li>
-                  <AuthButtons to="/profile" isMobile>
-                    Profile
-                  </AuthButtons>
-                </li>
-              )}
-              <li>
-                <AuthButtons
-                  onClick={() => handleSignOut(navigate)}
-                  isMobile={true}
+        <div className="flex items-center space-x-6">
+          <a
+            href="/#hero"
+            className="text-foreground dark:text-primary text-2xl font-bold"
+          >
+            Brand
+          </a>
+          <ul className="text-accent-foreground dark:text-accent-foreground hidden items-center space-x-6 md:flex">
+            {mainNavLinks.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="hover:text-muted-foreground dark:hover:text-muted-foreground"
                 >
-                  Sign Out
-                </AuthButtons>
+                  {link.label}
+                </a>
               </li>
-            </>
-          ) : (
-            <>
-              <li>
-                <AuthButtons to="/signin" isMobile={true}>
-                  Sign In
-                </AuthButtons>
-              </li>
-              <li>
-                <AuthButtons to="/signup" isMobile={true}>
-                  Sign Up
-                </AuthButtons>
-              </li>
-            </>
-          )}
-        </ul>
-      </div>
-    </nav>
+            ))}
+          </ul>
+        </div>
+
+        {/* Right Section: Theme Toggle and Auth Buttons */}
+        <div className="flex items-center space-x-4 sm:space-x-6">
+          <ThemeToggle className="text-accent-foreground dark:text-accent-foreground hover:text-muted-foreground dark:hover:text-muted-foreground cursor-pointer" />
+
+          {/* Desktop Auth Links */}
+          <div className="hidden md:flex">
+            <AuthNavLinks className="text-accent-foreground dark:text-accent-foreground space-x-6" />
+          </div>
+
+          {/* Mobile Burger Button */}
+          <div className="flex items-center md:hidden">
+            <button
+              onClick={() => setMenuOpen(true)}
+              className="text-foreground hover:text-muted-foreground text-3xl focus:outline-none"
+              aria-label="Open menu" // Accessibility
+              aria-expanded={menuOpen} // Accessibility
+              aria-controls="mobile-menu" // Accessibility (matches ID on MobileMenu if added)
+            >
+              ☰
+            </button>
+          </div>
+        </div>
+      </nav>
+      {/* Mobile Menu Component */}
+      <MobileMenu
+        isOpen={menuOpen}
+        onClose={closeMobileMenu}
+        navLinks={mainNavLinks}
+        // Add id="mobile-menu" if using aria-controls on the burger button
+      />
+
+      {/* Optional: Overlay when mobile menu is open */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-20 bg-black/30 md:hidden"
+          onClick={closeMobileMenu}
+          aria-hidden="true" // Hide from screen readers, menu itself is the focus
+        />
+      )}
+    </>
   );
 };
 

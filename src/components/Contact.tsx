@@ -4,6 +4,7 @@ import { contactSchema, ContactForm } from "../schemas/contactSchema";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import toast from "react-hot-toast";
+import { Button } from "./ui/button";
 
 const Contact = () => {
   const {
@@ -29,13 +30,13 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="flex h-screen flex-col items-center justify-center bg-white px-6 py-20 dark:bg-slate-700"
+      className="bg-background dark:bg-background flex h-screen flex-col items-center justify-center px-6 py-20"
     >
       <div className="mx-auto max-w-xl text-center">
-        <h3 className="mb-4 text-3xl font-bold text-indigo-600 dark:text-indigo-300">
+        <h3 className="text-card-foreground dark:text-card-foreground mb-4 text-3xl font-bold">
           Contact Us
         </h3>
-        <p className="mb-8 font-semibold text-gray-800 dark:text-gray-100">
+        <p className="text-muted-foreground dark:text-muted-foreground mb-8 font-semibold">
           Feel free to reach out for any inquiries or just to say hi!
         </p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -44,7 +45,7 @@ const Contact = () => {
               type="text"
               placeholder="Your Name"
               {...register("name")}
-              className="w-full rounded-md border border-gray-300 p-3 text-white placeholder:text-slate-400 focus:outline-2 focus:outline-indigo-400 dark:border-slate-400"
+              className="border-input placeholder:text-muted-foreground text-foreground focus-visible:ring-ring w-full rounded-md border p-3 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.name && (
               <p className="mt-1 text-left text-red-500 dark:text-red-400">
@@ -57,7 +58,7 @@ const Contact = () => {
               type="email"
               placeholder="Your Email"
               {...register("email")}
-              className="w-full rounded-md border border-gray-300 p-3 text-white placeholder:text-slate-400 focus:outline-2 focus:outline-indigo-400 dark:border-slate-400"
+              className="border-input placeholder:text-muted-foreground text-foreground focus-visible:ring-ring w-full rounded-md border p-3 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.email && (
               <p className="mt-1 text-left text-red-500 dark:text-red-400">
@@ -71,7 +72,7 @@ const Contact = () => {
               placeholder="Your Message"
               rows={4}
               {...register("message")}
-              className="w-full rounded-md border border-gray-300 p-3 text-white placeholder:text-slate-400 focus:outline-2 focus:outline-indigo-400 dark:border-slate-400"
+              className="border-input placeholder:text-muted-foreground text-foreground focus-visible:ring-ring w-full rounded-md border p-3 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.message && (
               <p className="mt-1 text-left text-red-500 dark:text-red-400">
@@ -79,13 +80,13 @@ const Contact = () => {
               </p>
             )}
           </div>
-          <button
+          <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full rounded-md border-white bg-indigo-500 p-3 font-semibold text-white hover:bg-indigo-600 focus:outline-offset-3 focus:outline-indigo-400"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 w-full cursor-pointer rounded-md border-white p-3 font-semibold shadow focus:outline-offset-3 focus:outline-indigo-400"
           >
             {isSubmitting ? "Sending..." : "Send Message"}
-          </button>
+          </Button>
         </form>
       </div>
     </section>

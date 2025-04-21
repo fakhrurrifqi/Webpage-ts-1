@@ -8,8 +8,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import toast from "react-hot-toast";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { useState } from "react";
 
 const SignIn = () => {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -21,6 +30,7 @@ const SignIn = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data: SignInSchema) => {
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       toast.success("Signed In");
@@ -28,60 +38,68 @@ const SignIn = () => {
     } catch (error) {
       toast.error("Failed to sign in");
       console.error("Sign in error: ", error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <div>
-      <div className="fixed top-3 right-3 z-20 flex size-9 items-center justify-center rounded-full bg-indigo-600/60 p-2 shadow-lg shadow-indigo-600/40 hover:ring-2 hover:ring-indigo-600 lg:top-4 lg:right-4 lg:size-10 dark:bg-indigo-300/50 dark:shadow-indigo-200/20 dark:hover:ring-indigo-200">
-        <ThemeToggle />
+      <div className="bg-primary dark:bg-primary shadow-primary/40 hover:ring-ring dark:shadow-primary/40 dark:hover:ring-ring fixed top-3 right-3 z-20 flex size-9 items-center justify-center rounded-full p-2 shadow-lg hover:ring-2 lg:top-4 lg:right-4 lg:size-10">
+        <ThemeToggle className="text-primary-foreground dark:text-primary-foreground cursor-pointer" />
       </div>
-      <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4 dark:bg-slate-900">
-        <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md dark:bg-slate-800">
-          <h2 className="mb-6 text-center text-2xl font-bold text-indigo-600 dark:text-indigo-300">
-            Sign In
-          </h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-4">
-              <EmailInput<SignInSchema>
-                id="signInEmail"
-                label="Email"
-                name="email"
-                register={register}
-                error={errors.email?.message}
-              />
-            </div>
-            <div>
-              <PasswordInput<SignInSchema>
-                id="signInPassword"
-                label="Password"
-                name="password"
-                register={register}
-                error={errors.password?.message}
-              />
-            </div>
-            <button
-              type="submit"
-              className="mt-5 w-full rounded-md border-white bg-indigo-500 p-3 font-semibold text-white hover:bg-indigo-600 focus:outline-offset-3 focus:outline-indigo-400"
-            >
+      <div className="flex min-h-screen items-center justify-center px-4">
+        <Card className="w-full max-w-md rounded-lg p-5 shadow-md">
+          <CardHeader>
+            <CardTitle className="text-card-foreground text-center text-2xl font-bold">
               Sign In
-            </button>
-          </form>
-          <p className="mt-4 text-gray-600 dark:text-gray-300">
-            Don't have an account?{" "}
-            <Link to="/signup" className="text-indigo-500 hover:underline">
-              Sign Up
-            </Link>
-          </p>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="mb-4">
+                <EmailInput<SignInSchema>
+                  id="signInEmail"
+                  label="Email"
+                  name="email"
+                  register={register}
+                  error={errors.email?.message}
+                />
+              </div>
+              <div className="mb-4">
+                <PasswordInput<SignInSchema>
+                  id="signInPassword"
+                  label="Password"
+                  name="password"
+                  register={register}
+                  error={errors.password?.message}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className={`text-primary-foreground w-full cursor-pointer rounded-md p-3 font-semibold transition ${
+                  loading
+                    ? "bg-muted cursor-not-allowed"
+                    : "bg-primary hover:bg-primary/90"
+                }`}
+              >
+                {loading ? "Signing in..." : "Sign In"}
+              </button>
+            </form>
+            <p className="text-card-foreground mt-4">
+              Don't have an account?{" "}
+              <Link to="/signup" className="underline">
+                Sign Up
+              </Link>
+            </p>
+          </CardContent>
           {/* Home Link */}
-          <div className="mt-4 text-center">
-            <a
-              href="/"
-              className="text-indigo-600 hover:underline dark:text-indigo-300"
-            >
+          <CardFooter className="flex justify-center text-center">
+            <a href="/" className="text-card-foreground underline">
               ← Back to Home
             </a>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );

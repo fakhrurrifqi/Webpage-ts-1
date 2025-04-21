@@ -11,8 +11,20 @@ import { auth } from "../lib/firebase";
 import toast from "react-hot-toast";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from "../lib/firebase";
+import { useAuth } from "../hooks/useAuth";
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 const SignUp = () => {
+  const [loading, setLoading] = useState(false);
+  const { refreshUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -24,99 +36,125 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data: SignUpSchema) => {
-    const { name, email, password } = data;
+    setLoading(true);
     try {
+      const { name, email, password } = data;
       const { user } = await createUserWithEmailAndPassword(
         auth,
         email,
         password,
       );
 
-      await updateProfile(user, { displayName: name });
+      const defaultPicRef = ref(
+        storage,
+        "default-avatar-icon-of-social-media-user-vector.jpg",
+      );
+      const defaultPhotoUrl = await getDownloadURL(defaultPicRef);
+
+      await updateProfile(user, {
+        displayName: name,
+        photoURL: defaultPhotoUrl,
+      });
 
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         name: name,
+        photoUrl: defaultPhotoUrl,
         createdAt: new Date(),
       });
+      if (refreshUser) {
+        await refreshUser();
+      }
       toast.success("Account created successfully!");
       setTimeout(() => navigate("/dashboard"), 500);
     } catch (error) {
-      toast.error("Error creating account. Please try again.");
-      console.error("Sign up error: ", error);
+      if (typeof error === "object" && error !== null && "code" in error) {
+        if (error.code === "auth/email-already-in-use") {
+          toast.error("This email is already registered. Try logging in.");
+        } else {
+          toast.error("Error creating account. Please try again.");
+          console.error("Sign up error: ", error);
+        }
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div>
-      <div className="fixed top-3 right-3 z-20 flex size-9 items-center justify-center rounded-full bg-indigo-600/60 p-2 shadow-lg shadow-indigo-600/40 hover:ring-2 hover:ring-indigo-600 lg:top-4 lg:right-4 lg:size-10 dark:bg-indigo-300/50 dark:shadow-indigo-200/20 dark:hover:ring-indigo-200">
-        <ThemeToggle />
+      <div className="bg-primary dark:bg-primary shadow-primary/40 hover:ring-ring dark:shadow-primary/40 dark:hover:ring-ring fixed top-3 right-3 z-20 flex size-9 items-center justify-center rounded-full p-2 shadow-lg hover:ring-2 lg:top-4 lg:right-4 lg:size-10">
+        <ThemeToggle className="text-primary-foreground dark:text-primary-foreground cursor-pointer" />
       </div>
-      <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4 dark:bg-slate-900">
-        <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md dark:bg-slate-800">
-          <h2 className="mb-6 text-center text-2xl font-bold text-indigo-600 dark:text-indigo-300">
+      <div className="bg-background flex min-h-screen items-center justify-center p-4">
+        <Card className="w-full max-w-md rounded-lg p-5 shadow-md">
+          <CardHeader className="text-card-foreground text-center text-2xl font-bold">
             Sign Up
-          </h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-4">
-              <NameInput<SignUpSchema>
-                id="signUpName"
-                label="Name"
-                name="name"
-                register={register}
-                error={errors.name?.message}
-              />
-            </div>
-            <div className="mb-4">
-              <EmailInput<SignUpSchema>
-                id="signUpEmail"
-                label="Email"
-                name="email"
-                register={register}
-                error={errors.email?.message}
-              />
-            </div>
-            <div className="mb-4">
-              <PasswordInput<SignUpSchema>
-                id="signUpPassword"
-                label="password"
-                name="password"
-                register={register}
-                error={errors.password?.message}
-              />
-            </div>
-            <div className="mb-4">
-              <PasswordInput<SignUpSchema>
-                id="signUpConfirmPassword"
-                label="Confirm Password"
-                name="confirmPassword"
-                register={register}
-                error={errors.confirmPassword?.message}
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full rounded-md border-white bg-indigo-500 p-3 font-semibold text-white hover:bg-indigo-600 focus:outline-offset-3 focus:outline-indigo-400"
-            >
-              Sign Up
-            </button>
-          </form>
-          <p className="mt-4 text-gray-600 dark:text-gray-300">
-            Already have an account?{" "}
-            <Link to="/signin" className="text-indigo-500 hover:underline">
-              Sign In
-            </Link>
-          </p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="mb-4">
+                <NameInput<SignUpSchema>
+                  id="signUpName"
+                  label="Name"
+                  name="name"
+                  register={register}
+                  error={errors.name?.message}
+                />
+              </div>
+              <div className="mb-4">
+                <EmailInput<SignUpSchema>
+                  id="signUpEmail"
+                  label="Email"
+                  name="email"
+                  register={register}
+                  error={errors.email?.message}
+                />
+              </div>
+              <div className="mb-4">
+                <PasswordInput<SignUpSchema>
+                  id="signUpPassword"
+                  label="Password"
+                  name="password"
+                  register={register}
+                  error={errors.password?.message}
+                />
+              </div>
+              <div className="mb-4">
+                <PasswordInput<SignUpSchema>
+                  id="signUpConfirmPassword"
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  register={register}
+                  error={errors.confirmPassword?.message}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className={`text-primary-foreground w-full cursor-pointer rounded-md p-3 font-semibold transition ${
+                  loading
+                    ? "bg-muted cursor-not-allowed"
+                    : "bg-primary hover:bg-primary/90"
+                }`}
+              >
+                {loading ? "Signing up..." : "Sign Up"}
+              </button>
+            </form>
+            <p className="text-card-foreground mt-4">
+              Already have an account?{" "}
+              <Link to="/signin" className="underline">
+                Sign In
+              </Link>
+            </p>
+          </CardContent>
           {/* Home Link */}
-          <div className="mt-4 text-center">
-            <a
-              href="/"
-              className="text-indigo-600 hover:underline dark:text-indigo-300"
-            >
+          <CardFooter className="flex justify-center text-center">
+            <a href="/" className="text-card-foreground underline">
               ← Back to Home
             </a>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );

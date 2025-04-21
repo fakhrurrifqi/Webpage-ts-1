@@ -14,7 +14,7 @@ const Home = () => {
     }
   }, []);
   return (
-    <div className="font-grotesk">
+    <div>
       <Navbar />
       <Hero />
       <Features />

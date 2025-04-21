@@ -19,11 +19,11 @@ const AuthButtons = ({
   isMobile = false,
 }: AuthButtonsProps) => {
   const linkClasses = isMobile
-    ? "block hover:text-indigo-400 dark:hover:text-indigo-300"
-    : "px-4 py-1.5 hover:text-indigo-800 dark:hover:text-indigo-300";
+    ? "block hover:text-muted-foreground dark:hover:text-muted-foreground"
+    : "px-4 py-1.5 hover:text-muted-foreground dark:hover:text-muted-foreground";
 
   const buttonClasses =
-    "px-4 py-1.5 font-bold rounded-md bg-indigo-600 text-white hover:bg-indigo-500 hover:text-white dark:bg-indigo-400 dark:text-gray-900 dark:hover:bg-indigo-500 dark:hover:text-white";
+    "px-4 py-1.5 font-bold rounded-md bg-primary text-primary-foreground hover:bg-primary/90 dark:primary dark:text-primary-foreground dark:hover:bg-primary/90 cursor-pointer";
 
   const baseClasses = variant === "button" ? buttonClasses : linkClasses;
 
