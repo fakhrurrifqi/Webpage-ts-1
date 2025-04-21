@@ -13,7 +13,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from "../lib/firebase";
-import { useAuth } from "../hooks/useAuth";
+// import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
 import {
   Card,
@@ -24,7 +24,6 @@ import {
 
 const SignUp = () => {
   const [loading, setLoading] = useState(false);
-  const { refreshUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -62,9 +61,6 @@ const SignUp = () => {
         photoUrl: defaultPhotoUrl,
         createdAt: new Date(),
       });
-      if (refreshUser) {
-        await refreshUser();
-      }
       toast.success("Account created successfully!");
       setTimeout(() => navigate("/dashboard"), 500);
     } catch (error) {
