@@ -3,6 +3,8 @@ import { ReactNode, useEffect, useState } from "react";
 import { auth } from "../lib/firebase";
 import { AuthContext } from "./AuthContext";
 import { AppUser } from "./AuthContext";
+import { db } from "../lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
@@ -11,11 +13,16 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        const firestoreData = docSnap.exists() ? docSnap.data() : {};
         setCurrentUser({
           uid: user.uid,
           email: user.email || "",
-          name: user.displayName || "",
-          photoUrl: user.photoURL || "",
+          name: firestoreData.name || user.displayName || "",
+          photoUrl: firestoreData.photoUrl || user.photoURL || "",
+          bio: firestoreData.bio || "",
         });
       } else {
         setCurrentUser(null);

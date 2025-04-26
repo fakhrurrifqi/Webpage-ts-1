@@ -5,6 +5,7 @@ type UserProfile = {
   name: string;
   email: string;
   photoUrl: string;
+  bio: string;
 };
 
 export const fetchUserProfile = async (uid: string): Promise<UserProfile> => {

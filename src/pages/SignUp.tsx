@@ -8,12 +8,11 @@ import EmailInput from "../components/EmailInput";
 import NameInput from "../components/NameInput";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../lib/firebase";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from "../lib/firebase";
-// import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
 import {
   Card,
@@ -60,6 +59,7 @@ const SignUp = () => {
         name: name,
         photoUrl: defaultPhotoUrl,
         createdAt: new Date(),
+        bio: "",
       });
       toast.success("Account created successfully!");
       setTimeout(() => navigate("/dashboard"), 500);

@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema, ContactForm } from "../schemas/contactSchema";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 
 const Contact = () => {

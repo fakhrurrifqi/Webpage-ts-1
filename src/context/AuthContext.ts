@@ -5,6 +5,7 @@ export interface AppUser {
   email: string;
   name?: string;
   photoUrl?: string;
+  bio?: string;
 }
 
 export interface AuthContextType {

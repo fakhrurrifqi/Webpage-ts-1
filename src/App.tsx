@@ -1,4 +1,5 @@
-import { Toaster } from "react-hot-toast";
+// import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import AppRoutes from "./routes/AppRoutes";
 
 function App() {
@@ -6,13 +7,15 @@ function App() {
     <>
       <div className="font-grotesk">
         <Toaster
-          toastOptions={{
-            style: {
-              borderRadius: "8px",
-              background: "#333",
-              color: "#fff",
-            },
-          }}
+          richColors
+          position="top-center"
+          // toastOptions={{
+          //   style: {
+          //     borderRadius: "8px",
+          //     background: "#333",
+          //     color: "#fff",
+          //   },
+          // }}
         />
         <AppRoutes />
       </div>
