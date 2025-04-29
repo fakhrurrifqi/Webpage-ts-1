@@ -15,7 +15,7 @@ html {
 
 @layer components {
   .animated-btn {
-    @apply inline-block transform rounded-lg bg-primary px-6 py-3 font-bold text-primary-foreground shadow-md transition duration-300 hover:translate-x-1 hover:-translate-y-0.5 hover:bg-primary/90;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 inline-block transform rounded-lg px-6 py-3 font-bold shadow-md transition duration-300 hover:translate-x-1 hover:-translate-y-0.5;
   }
 }
 
@@ -26,7 +26,8 @@ html {
     -webkit-text-fill-color: var(--color-card-foreground) !important;
     caret-color: #fff !important;
     transition: background-color 9999s ease-in-out 0s !important;
-    /* border: none !important; */
+    border: none !important;
+    outline: none !important;
   }
 
   input:-webkit-autofill,
@@ -35,7 +36,24 @@ html {
     -webkit-text-fill-color: var(--color-card-foreground) !important;
     caret-color: #000 !important;
     transition: background-color 9999s ease-in-out 0s !important;
-    /* border: none !important; */
+    border: none !important;
+    outline: none !important;
+  }
+
+  input:read-only:-webkit-autofill,
+  textarea:read-only:-webkit-autofill {
+    box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: var(--color-card-foreground) !important;
+    border: none !important;
+    outline: none !important;
+  }
+
+  .dark input:read-only:-webkit-autofill,
+  .dark textarea:read-only:-webkit-autofill {
+    box-shadow: 0 0 0 1000px var(--card) inset !important; /* ← your dark background color */
+    -webkit-text-fill-color: var(--color-card-foreground) !important;
+    border: none !important;
+    outline: none !important;
   }
 
   input:-webkit-autofill:focus {

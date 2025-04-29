@@ -1,5 +1,7 @@
 import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 import { useState } from "react";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 type PasswordInputProps<T extends FieldValues> = {
   id: string;
@@ -20,15 +22,15 @@ const PasswordInput = <T extends FieldValues>({
 
   return (
     <div>
-      <label htmlFor={id} className="text-md text-card-foreground mb-1 block">
+      <Label htmlFor={id} className="text-md text-card-foreground mb-1 block">
         {label}
-      </label>
+      </Label>
       <div className="relative">
-        <input
+        <Input
           id={id}
           type={showPassword ? "text" : "password"}
           {...register(name)}
-          className="border-input placeholder:text-muted-foreground text-foreground focus-visible:ring-ring w-full rounded-md border p-3 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          className="border-input placeholder:text-muted-foreground text-foreground focus-visible:ring-ring w-full rounded-md border text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
         />
         <button
           type="button"

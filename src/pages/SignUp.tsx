@@ -20,6 +20,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const SignUp = () => {
   const [loading, setLoading] = useState(false);
@@ -125,17 +126,17 @@ const SignUp = () => {
                   error={errors.confirmPassword?.message}
                 />
               </div>
-              <button
+              <Button
                 type="submit"
                 disabled={loading}
-                className={`text-primary-foreground w-full cursor-pointer rounded-md p-3 font-semibold transition ${
+                className={`text-primary-foreground mt-2 w-full cursor-pointer rounded-md font-semibold transition ${
                   loading
                     ? "bg-muted cursor-not-allowed"
                     : "bg-primary hover:bg-primary/90"
                 }`}
               >
                 {loading ? "Signing up..." : "Sign Up"}
-              </button>
+              </Button>
             </form>
             <p className="text-card-foreground mt-4">
               Already have an account?{" "}

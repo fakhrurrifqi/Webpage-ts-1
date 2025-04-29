@@ -16,6 +16,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
@@ -74,17 +75,17 @@ const SignIn = () => {
                   error={errors.password?.message}
                 />
               </div>
-              <button
+              <Button
                 type="submit"
                 disabled={loading}
-                className={`text-primary-foreground w-full cursor-pointer rounded-md p-3 font-semibold transition ${
+                className={`text-primary-foreground w-full cursor-pointer rounded-md mt-2 font-semibold transition ${
                   loading
                     ? "bg-muted cursor-not-allowed"
                     : "bg-primary hover:bg-primary/90"
                 }`}
               >
                 {loading ? "Signing in..." : "Sign In"}
-              </button>
+              </Button>
             </form>
             <p className="text-card-foreground mt-4">
               Don't have an account?{" "}

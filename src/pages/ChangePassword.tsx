@@ -17,6 +17,7 @@ import {
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { getPasswordChangeErrorMessage } from "@/utils/firebaseHelper";
+import { Button } from "@/components/ui/button";
 
 // Helper function for re-authentication
 const reaunthenticateUser = async (
@@ -29,7 +30,6 @@ const reaunthenticateUser = async (
   const credential = EmailAuthProvider.credential(user.email, currentPassword);
   await reauthenticateWithCredential(user, credential);
 };
-
 
 const ChangePassword = () => {
   const [loading, setLoading] = useState(false);
@@ -122,7 +122,7 @@ const ChangePassword = () => {
             </div>
 
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
               disabled={loading}
               className={`text-primary-foreground focus:ring-primary w-full rounded-md px-4 py-2.5 font-semibold transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none ${
@@ -132,12 +132,12 @@ const ChangePassword = () => {
               }`}
             >
               {loading ? "Updating..." : "Update Password"}
-            </button>
+            </Button>
           </form>
           <div className="mt-5">
-          <a href="/profile" className="text-card-foreground underline">
+            <Link to="/profile" className="text-card-foreground underline">
               ← Cancel
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -5,6 +5,8 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
 const Contact = () => {
   const {
@@ -41,11 +43,11 @@ const Contact = () => {
         </p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <input
+            <Input
               type="text"
               placeholder="Your Name"
               {...register("name")}
-              className="border-input placeholder:text-muted-foreground text-foreground focus-visible:ring-ring w-full rounded-md border p-3 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="border-input placeholder:text-muted-foreground text-foreground focus-visible:ring-ring w-full rounded-md border text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.name && (
               <p className="mt-1 text-left text-red-500 dark:text-red-400">
@@ -54,7 +56,7 @@ const Contact = () => {
             )}
           </div>
           <div>
-            <input
+            <Input
               type="email"
               placeholder="Your Email"
               {...register("email")}
@@ -67,12 +69,11 @@ const Contact = () => {
             )}
           </div>
           <div>
-            <textarea
+            <Textarea
               id="message"
               placeholder="Your Message"
-              rows={4}
               {...register("message")}
-              className="border-input placeholder:text-muted-foreground text-foreground focus-visible:ring-ring w-full rounded-md border p-3 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="border-input placeholder:text-muted-foreground text-foreground focus-visible:ring-ring w-full rounded-md border text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.message && (
               <p className="mt-1 text-left text-red-500 dark:text-red-400">
@@ -83,7 +84,7 @@ const Contact = () => {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 w-full cursor-pointer rounded-md border-white p-3 font-semibold shadow focus:outline-offset-3 focus:outline-indigo-400"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mt-2 w-full cursor-pointer rounded-md border-white font-semibold shadow focus:outline-offset-3 focus:outline-indigo-400"
           >
             {isSubmitting ? "Sending..." : "Send Message"}
           </Button>
